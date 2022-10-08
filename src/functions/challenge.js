@@ -153,8 +153,26 @@ export const biggestCherriesManagers = () => {
 }
 
 // 7 Objeto en el cual las claves sean el nombre del administrador y el valor un arreglo con los nombres de los campos que administra, ordenados alfabéticamente
-export const farmManagerPaddocks = () => {
-
+export const farmManagerPaddocks = (paddockManagersArray = paddockManagers, paddocksArray = paddocks) => { //igualamos como en el punto 3 para no afectar otros test
+  const farmManagers = {}
+    //creamos el objeto
+    //bucle trayendo las propiedades id y name de paddockMagagers
+  for (const {id, name} of paddockManagersArray) {
+    farmManagers[name] = []
+    //igualamos a los manager por plantación
+    for (const {farmId, paddockManagerId} of paddocksArray) {
+      if(id === paddockManagerId) farmManagers[name].push(farms.find(farm => farm.id === farmId))
+    }
+    //creamos un nuevo array
+    farmManagers[name] = [
+      ...new Set(
+          farmManagers[name]
+            .sort((a, b) => a.name.localeCompare(b.name)) //ordenamos
+            .map(farm => farm.name) //trae el nombre de cada granja
+      )
+    ]  
+  }
+  return farmManagers
 }
 
 // 8 Objeto en que las claves sean el tipo de cultivo concatenado con su año de plantación (la concatenación tiene un separador de guión ‘-’, por ejemplo AVELLANOS-2020) y el valor otro objeto en el cual la clave sea el id del administrador y el valor el nombre del administrador
